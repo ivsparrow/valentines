@@ -9,40 +9,112 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            /* Цветной фон для страницы */
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .text {
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.3);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .container {
             position: relative;
             display: inline-block;
+            cursor: pointer;
+            z-index: 10;
         }
 
-        .box,
+        .box {
+            width: 300px;
+            height: 300px;
+            /* Убедитесь, что размеры указаны для изображения */
+            object-fit: contain;
+            /* Изображение будет покрывать блок */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+        }
+
         .valentine {
             width: 300px;
-            cursor: pointer;
-            transition: opacity 1s;
-        }
-
-        .valentine {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
             opacity: 0;
+            transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
+            z-index: 20;
         }
     </style>
 </head>
 
 <body>
-    <h2>Нажми на коробку 🎁</h2>
+    <h1 id="title">Нажми на коробку 🎁</h1>
     <div class="container" onclick="openGift()">
-        <img src="box.jpg" class="box" id="box">
-        <img src="card.jpeg" class="valentine" id="valentine">
+        <img src="box6.png" class="box" id="box">
+        <img src="card2.jpg" class="valentine" id="valentine">
     </div>
+    <div id="background-text" class="background-text"></div>
 
     <script>
         function openGift() {
             document.getElementById('box').style.opacity = '0';
             document.getElementById('valentine').style.opacity = '1';
+            document.getElementById('valentine').style.transform = 'translate(-50%, -50%) scale(1)';
+            document.getElementById('title').style.display = 'none';
+
+            const background = document.getElementById('background-text');
+            background.style.display = 'block';
+
+            for (let i = 0; i < 30; i++) {
+                let textElement = document.createElement('div');
+                textElement.classList.add('text');
+                if (Math.random() > 0.5) {
+                    textElement.textContent = 'Я так сильно тебя люблю ❤️';
+                } else {
+                    textElement.textContent = 'Обожаю тебя 💖';
+                }
+                textElement.style.top = Math.random() * 100 + 'vh';
+                textElement.style.left = Math.random() * 100 + 'vw';
+                textElement.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+                textElement.style.opacity = Math.random() * 0.5 + 0.5;
+                background.appendChild(textElement);
+            }
         }
     </script>
 </body>
