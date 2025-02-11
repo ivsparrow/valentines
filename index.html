@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Открыть подарок</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .box,
+        .valentine {
+            width: 300px;
+            cursor: pointer;
+            transition: opacity 1s;
+        }
+
+        .valentine {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Нажми на коробку 🎁</h2>
+    <div class="container" onclick="openGift()">
+        <img src="box.jpg" class="box" id="box">
+        <img src="card.jpeg" class="valentine" id="valentine">
+    </div>
+
+    <script>
+        function openGift() {
+            document.getElementById('box').style.opacity = '0';
+            document.getElementById('valentine').style.opacity = '1';
+        }
+    </script>
+</body>
+
+</html>
