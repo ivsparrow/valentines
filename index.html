@@ -22,14 +22,14 @@
         }
 
         .background-text {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             display: none;
             pointer-events: none;
-            z-index: -1;
+            z-index: 5;
         }
 
         .text {
@@ -64,6 +64,19 @@
             object-fit: contain;
             /* Изображение будет покрывать блок */
             transition: transform 0.3s ease-in-out;
+            animation: bounce 0.5s infinite alternate ease-in-out;
+
+
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-20px);
+            }
         }
 
         .box:hover {
@@ -101,19 +114,41 @@
             const background = document.getElementById('background-text');
             background.style.display = 'block';
 
-            for (let i = 0; i < 30; i++) {
+            const maxWidth = window.innerWidth - 160; // Ограничение по ширине
+            const maxHeight = window.innerHeight - 60; // Ограничение по высоте
+            const textElements = [];
+            const textSize = { width: 160, height: 60 }; // Учитываем ширину текста
+
+            for (let i = 0; i < 50; i++) { // Количество надписей
                 let textElement = document.createElement('div');
                 textElement.classList.add('text');
-                if (Math.random() > 0.5) {
-                    textElement.textContent = 'Я так сильно тебя люблю ❤️';
-                } else {
-                    textElement.textContent = 'Обожаю тебя 💖';
+                textElement.textContent = Math.random() > 0.5 ? 'Я так сильно тебя люблю ❤️' : 'Обожаю тебя 💖';
+
+                let attempts = 0;
+                let left, top, overlaps;
+
+                do {
+                    left = Math.random() * maxWidth;
+                    top = Math.random() * maxHeight;
+                    overlaps = textElements.some(el =>
+                        left < el.left + textSize.width &&
+                        left + textSize.width > el.left &&
+                        top < el.top + textSize.height &&
+                        top + textSize.height > el.top
+                    );
+                    attempts++;
+                } while (overlaps && attempts < 100); // Больше попыток для точного расположения
+
+                if (attempts < 100) { // Добавляем текст, только если нашли место
+                    textElement.style.position = "absolute";
+                    textElement.style.left = `${left}px`;
+                    textElement.style.top = `${top}px`;
+                    textElement.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+                    textElement.style.opacity = Math.random() * 0.5 + 0.5;
+
+                    background.appendChild(textElement);
+                    textElements.push({ left, top }); // Запоминаем координаты
                 }
-                textElement.style.top = Math.random() * 100 + 'vh';
-                textElement.style.left = Math.random() * 100 + 'vw';
-                textElement.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
-                textElement.style.opacity = Math.random() * 0.5 + 0.5;
-                background.appendChild(textElement);
             }
         }
     </script>
